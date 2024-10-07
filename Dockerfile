@@ -42,7 +42,7 @@ ENV DB_URI=postgresql://fingerprint_user:VAYbmJfOZYyJDBDKL1U7BRxv6OoqRR1h@dpg-cr
 
 ENV REDIS_LIST_NAME=attendence_logs
 
-ENV REDIS_URI=redis://206.189.131.53/
+ENV REDIS_URI=redis://127.0.0.1/
 
 
 COPY --from=final_builder /app/target/release/cache_db_to_service .

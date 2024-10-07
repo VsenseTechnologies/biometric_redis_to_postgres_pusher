@@ -52,7 +52,7 @@ impl RedisService {
         let list_log_get_command="LRANGE";
         let list_name=&self.list_name;
         let list_start_index="0";
-        let list_end_index="0";
+        let list_end_index="-1";
 
         let arguements=[list_name,list_start_index,list_end_index];
 
@@ -65,7 +65,7 @@ impl RedisService {
 
     pub async fn remove_list_log(self:&Self) -> Result<(),redis::RedisError> {
 
-        let list_log_remove_command="LPOP";
+        let list_log_remove_command="RPOP";
         let list_name=&self.list_name;
 
         let arguements=[list_name];
