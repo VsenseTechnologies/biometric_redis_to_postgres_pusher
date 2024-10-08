@@ -15,9 +15,9 @@ pub enum AttendenceStatus {
 
 #[derive(Debug,Deserialize)]
 pub struct AttendenceLogRequest {
-    pub unit_id:String,
-    pub student_unit_id:String,
-    pub timestamp:String
+    pub uid:String,
+    pub suid:String,
+    pub tm:String
 }
 
 #[derive(Debug)]
@@ -40,15 +40,15 @@ impl TryFrom<AttendenceLogRequest> for AttendenceLog {
 
     fn try_from(value: AttendenceLogRequest) -> Result<Self, Self::Error> {
 
-        let datetime=NaiveDateTime::parse_from_str(&value.timestamp, "%Y-%m-%dT%H:%M:%S")?;
+        let datetime=NaiveDateTime::parse_from_str(&value.tm, "%Y-%m-%dT%H:%M:%S")?;
 
         let date=datetime.date().to_string();
 
         let time=datetime.time().to_string();
 
         Ok(Self{
-            student_unit_id:value.student_unit_id,
-            unit_id:value.unit_id,
+            student_unit_id:value.suid,
+            unit_id:value.uid,
             date,
             login:time,
             logout:String::from("pending")
@@ -61,7 +61,7 @@ impl TryFrom<AttendenceLogRequest> for AttendenceUpdate {
     type Error = ParseError;
     fn try_from(value: AttendenceLogRequest) -> Result<Self, Self::Error> {
 
-        let datetime=NaiveDateTime::parse_from_str(&value.timestamp, "%Y-%m-%dT%H:%M:%S")?;
+        let datetime=NaiveDateTime::parse_from_str(&value.tm, "%Y-%m-%dT%H:%M:%S")?;
 
         let time=datetime.time().to_string();
 

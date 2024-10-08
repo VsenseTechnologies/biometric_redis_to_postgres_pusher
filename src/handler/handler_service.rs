@@ -39,12 +39,12 @@ impl HandlerService {
 
                                 if let Ok(attendence_log_request)=serde_json::from_str::<AttendenceLogRequest>(&attendence_log_request_json) {
                                 
-                                    if let Ok(student_id)=self.db_service.get_student_id(attendence_log_request.unit_id.clone(), attendence_log_request.student_unit_id.clone()).await {
+                                    if let Ok(student_id)=self.db_service.get_student_id(attendence_log_request.uid.clone(), attendence_log_request.suid.clone()).await {
                             
 
-                                        let unit_id=attendence_log_request.unit_id.clone();
-                                        let student_unit_id=attendence_log_request.student_unit_id.clone();
-                                        if let Ok(datetime)=NaiveDateTime::parse_from_str(&attendence_log_request.timestamp, "%Y-%m-%dT%H:%M:%S"){
+                                        let unit_id=attendence_log_request.uid.clone();
+                                        let student_unit_id=attendence_log_request.suid.clone();
+                                        if let Ok(datetime)=NaiveDateTime::parse_from_str(&attendence_log_request.tm, "%Y-%m-%dT%H:%M:%S"){
 
                                         let date=datetime.date().to_string();
 
@@ -106,7 +106,7 @@ impl HandlerService {
                                         }
 
                                     }else{
-                                        error!("error occured while getting the student id by using unit_id -> {} and student_id -> {} from postgres",attendence_log_request.unit_id,attendence_log_request.student_unit_id);
+                                        error!("error occured while getting the student id by using unit_id -> {} and student_id -> {} from postgres",attendence_log_request.uid,attendence_log_request.suid);
                                     }
                                 }else{
                                     error!("error occured while parsing the attendence log request from [{}]",attendence_log_request_json);
@@ -119,7 +119,7 @@ impl HandlerService {
                     error!("error occurred while checking the attendence log list length from redis");
                 }
                 
-                tokio::time::sleep(Duration::from_secs(10)).await;
+                tokio::time::sleep(Duration::from_secs(2)).await;
             }
     }
 }
