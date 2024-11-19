@@ -20,7 +20,7 @@ COPY --from=planner /usr/local/cargo /usr/local/cargo
 RUN cargo chef cook --release --recipe-path recipe.json
 
 
-#stage 3 building the source code 
+#stage 3 building the source code
 
 FROM rust:slim-bullseye AS final_builder
 
@@ -34,17 +34,10 @@ RUN cargo build --release
 
 #stage 4 setting up the final runtime for the application
 
-FROM debian:bullseye-slim 
+FROM debian:bullseye-slim
 
 WORKDIR /app
 
-ENV DB_URI=postgresql://fingerprint_user:VAYbmJfOZYyJDBDKL1U7BRxv6OoqRR1h@dpg-cr4r595umphs73drro10-a.oregon-postgres.render.com/fingerprint
+COPY --from=final_builder /app/target/release/cache_db_to_service ./main
 
-ENV REDIS_LIST_NAME=attendence_logs
-
-ENV REDIS_URI=redis://127.0.0.1/
-
-
-COPY --from=final_builder /app/target/release/cache_db_to_service .
-
-CMD ["./cache_db_to_service"]
+CMD ["./main"]
